@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KamDai — Find Skilled Workers Near You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0F0E0C;
+      --ink-2:     #3D3B35;
+      --ink-3:     #7A7870;
+      --paper:     #FAF9F6;
+      --paper-2:   #F2F0EB;
+      --paper-3:   #E8E5DE;
+      --accent:       #2563EB;
+      --accent-light: #DBEAFE;
+      --accent-dark:  #1D4ED8;
+      --teal:      #1A7F74;
+      --teal-l:    #E0F2EF;
+      --card-r:    14px;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+      --bg: var(--paper);
+      --text: var(--ink);
+      
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .nav-auth{
+  display:flex;
+  gap:10px;
+}
+
+.nav-login{
+  padding:8px 18px;
+  border:1px solid var(--accent);
+  border-radius:8px;
+  text-decoration:none;
+  color:var(--accent);
+}
+
+.nav-signup{
+  padding:8px 18px;
+  border-radius:8px;
+  text-decoration:none;
+  background:var(--accent);
+  color:white;
+}
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(250,249,246,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--paper-3);
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 22px; font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--ink-2);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--ink) !important;
+      color: var(--paper) !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 500 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--accent) !important; color: var(--paper) !important; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
+    .theme-btn{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+
+  background:var(--paper-2);
+  color:var(--ink);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:16px;
+
+  transition:0.2s;
+}
+
+.theme-btn:hover{
+  transform:scale(1.05);
+  background:var(--paper-3);
+}
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 5% 80px;
+      display: flex; align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(232,136,42,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(26,127,116,0.08) 0%, transparent 60%);
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0; z-index: 0; opacity: 0.04;
+      background-image: linear-gradient(var(--ink) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-light); border: 1px solid rgba(232,136,42,0.25);
+      border-radius: 100px; padding: 5px 14px 5px 8px;
+      font-size: 12px; font-weight: 500; color: var(--accent);
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-eyebrow .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .hero-h1 {
+      font-family: var(--display);
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 800; line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--ink);
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-h1 em { font-style: normal; color: var(--accent); }
+    .hero-h1 .line-teal { color: var(--teal); }
+    .hero-sub {
+      font-size: 17px; color: var(--ink-2); line-height: 1.65;
+      max-width: 480px; margin-bottom: 36px;
+      font-weight: 300;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-sub strong { font-weight: 500; color: var(--ink); }
+    .hero-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: var(--paper);
+      padding: 14px 28px; border-radius: 10px;
+      font-family: var(--sans); font-size: 15px; font-weight: 500;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--ink);
+      padding: 14px 28px; border-radius: 10px;
+      border: 1.5px solid var(--paper-3);
+      font-family: var(--sans); font-size: 15px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--ink); background: var(--paper-2); transform: translateY(-1px); }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 48px;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .stat-item { }
+    .stat-num {
+      font-family: var(--display); font-size: 26px; font-weight: 700;
+      color: var(--ink); line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-card-stack { position: relative; height: 420px; }
+    .hcard {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--paper-3);
+      border-radius: var(--card-r);
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .hcard-main {
+      width: 100%; top: 0; left: 0;
+      animation: floatA 4s ease-in-out infinite;
+    }
+    .hcard-mini {
+      width: 200px;
+      animation: floatB 4s 0.8s ease-in-out infinite;
+    }
+    .hcard-mini-1 { bottom: 60px; right: -20px; }
+    .hcard-mini-2 { bottom: -10px; left: 20px; }
+
+    @keyframes floatA {
+      0%,100% { transform: translateY(0px) rotate(-1deg); }
+      50%      { transform: translateY(-8px) rotate(-1deg); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    .hcard-worker { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .hcard-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, #E8882A, #C0392B);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-weight: 700; font-size: 16px; color: white;
+      flex-shrink: 0;
+    }
+    .hcard-name { font-weight: 600; font-size: 15px; color: var(--ink); }
+    .hcard-role { font-size: 12px; color: var(--ink-3); }
+    .hcard-stars { color: #F59E0B; font-size: 13px; letter-spacing: 1px; }
+    .hcard-rating { font-size: 12px; color: var(--ink-3); }
+    .hcard-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+    .tag {
+      font-size: 11px; padding: 3px 9px; border-radius: 100px;
+      background: var(--paper-2); color: var(--ink-2); font-weight: 500;
+    }
+    .tag-green { background: var(--teal-l); color: var(--teal); }
+    .hcard-price-row {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--paper-2); padding-top: 12px; margin-top: 12px;
+    }
+    .hcard-price { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+    .hcard-price span { font-family: var(--sans); font-size: 11px; font-weight: 400; color: var(--ink-3); }
+    .book-chip {
+      background: var(--ink); color: white;
+      font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 8px;
+    }
+    .mini-label { font-size: 11px; color: var(--ink-3); margin-bottom: 4px; }
+    .mini-val { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--ink); }
+    .mini-sub { font-size: 11px; color: var(--teal); margin-top: 2px; }
+
+    /* ── CATEGORIES ── */
+    .section { padding: 96px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 700; line-height: 1.15; letter-spacing: -0.8px;
+      margin-bottom: 14px;
+    }
+    .section-sub { font-size: 16px; color: var(--ink-2); max-width: 520px; font-weight: 300; }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px; margin-top: 48px;
+    }
+    .cat-card {
+      background: white; border: 1px solid var(--paper-3);
+      border-radius: var(--card-r); padding: 20px 16px;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .cat-card:hover {
+      border-color: var(--accent); transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(232,136,42,0.12);
+    }
+    .cat-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+    .cat-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .cat-count { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { background: var(--paper-2); }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      margin-top: 56px;
+      border: 1px solid var(--paper-3); border-radius: 16px; overflow: hidden;
+    }
+    .step {
+      background: white; padding: 40px 32px;
+      position: relative;
+    }
+    .step:not(:last-child) { border-right: 1px solid var(--paper-3); }
+    .step-num {
+      font-family: var(--display);
+      font-size: 64px; font-weight: 800;
+      color: var(--paper-2); line-height: 1;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    .step-icon-wrap {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent-light); border: 1px solid rgba(232,136,42,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .step-title { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .step-desc { font-size: 14px; color: var(--ink-2); line-height: 1.65; font-weight: 300; }
+
+    /* ── WORKERS SECTION ── */
+    .workers-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px; margin-top: 48px;
+    }
+    .worker-card {
+      background: white; border: 1px solid var(--paper-3);
+      border-radius: var(--card-r); padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .worker-card:hover { border-color: var(--ink); transform: translateY(-2px); }
+    .wc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .wc-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-weight: 700; font-size: 17px; color: white;
+      flex-shrink: 0;
+    }
+    .wc-name { font-weight: 600; font-size: 15px; color: var(--ink); }
+    .wc-role { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+    .wc-verified {
+      margin-left: auto;
+      background: var(--teal-l); color: var(--teal);
+      font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 100px;
+    }
+    .wc-stars { color: #F59E0B; font-size: 13px; }
+    .wc-rating-row { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+    .wc-jobs { font-size: 12px; color: var(--ink-3); }
+    .wc-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .wc-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--paper-2); padding-top: 14px;
+    }
+    .wc-price { font-family: var(--display); font-size: 18px; font-weight: 700; }
+    .wc-price small { font-family: var(--sans); font-size: 11px; font-weight: 400; color: var(--ink-3); }
+    .wc-dist { font-size: 12px; color: var(--ink-3); }
+
+    /* ── TRUST ── */
+    .trust-section { background: var(--ink); color: var(--paper); }
+    .trust-section .section-title { color: var(--paper); }
+    .trust-section .section-tag { color: var(--accent); }
+    .trust-section .section-sub { color: rgba(250,249,246,0.6); }
+    .trust-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      margin-top: 56px;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;
+    }
+    .trust-item {
+      background: rgba(255,255,255,0.03); padding: 40px 32px;
+    }
+    .trust-item:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.08); }
+    .trust-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(232,136,42,0.15); border: 1px solid rgba(232,136,42,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .trust-title { font-family: var(--display); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .trust-desc { font-size: 14px; color: rgba(250,249,246,0.55); line-height: 1.65; font-weight: 300; }
+
+    /* ── CTA BANNER ── */
+    .cta-section {
+      padding: 96px 5%;
+      background: var(--paper);
+    }
+    .cta-box {
+      max-width: 1200px; margin: 0 auto;
+      background: linear-gradient(135deg, var(--accent) 0%, #D4732A 100%);
+      border-radius: 24px; padding: 72px 64px;
+      display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      top: -100px; right: -80px;
+    }
+    .cta-box::after {
+      content: ''; position: absolute;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: -60px; left: 200px;
+    }
+    .cta-title {
+      font-family: var(--display);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800; color: white; line-height: 1.1;
+      letter-spacing: -0.8px; margin-bottom: 12px;
+    }
+    .cta-sub { font-size: 16px; color: rgba(255,255,255,0.8); font-weight: 300; }
+    .cta-actions { display: flex; flex-direction: column; gap: 10px; z-index: 1; }
+    .btn-white {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: white; color: var(--accent);
+      padding: 14px 28px; border-radius: 10px;
+      font-family: var(--sans); font-size: 14px; font-weight: 600;
+      text-decoration: none; white-space: nowrap;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .btn-ghost-white {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; color: white;
+      padding: 14px 28px; border-radius: 10px;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      font-family: var(--sans); font-size: 14px; font-weight: 500;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-ghost-white:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: rgba(250,249,246,0.5);
+      padding: 56px 5% 32px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-logo {
+      font-family: var(--display); font-size: 22px; font-weight: 800;
+      color: var(--paper); text-decoration: none; display: block; margin-bottom: 12px;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-desc { font-size: 13px; line-height: 1.7; max-width: 240px; font-weight: 300; }
+    .footer-col h4 {
+      font-family: var(--display); font-size: 13px; font-weight: 600;
+      color: var(--paper); letter-spacing: 0.5px; margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block; font-size: 13px; color: rgba(250,249,246,0.45);
+      text-decoration: none; margin-bottom: 10px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 28px; font-size: 12px;
+    }
+    .footer-bottom a { color: rgba(250,249,246,0.45); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    body.dark{
+    --paper:#050816;
+    --paper-2:#0F172A;
+    --paper-3:#1E293B;
+
+    --ink:#FFFFFF;
+    --ink-2:#CBD5E1;
+    --ink-3:#94A3B8;
+
+    --accent:#3B82F6;
+    --accent-light:#1E3A8A;
+}
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step:not(:last-child) { border-right: none; border-bottom: 1px solid var(--paper-3); }
+      .trust-grid { grid-template-columns: 1fr; }
+      .trust-item:not(:last-child) { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .cta-box { grid-template-columns: 1fr; padding: 40px 28px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+      .hero-stats { flex-wrap: wrap; gap: 20px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Kam<span>Dai</span></a>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#categories">Categories</a>
+      <a href="browse.html">Find Workers</a>
+    <div class="nav-auth">
+
+<a href="login.html" class="nav-login">
+  Login
+</a>
+
+<a href="signup.html" class="nav-signup">
+  Sign Up
+</a>
+
+</div>
+       <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+    
+    <div class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="dot"></span>
+          Now serving Kathmandu
+        </div>
+        <h1 class="hero-h1">
+          Hire skilled<br/>
+          <em>KamDais</em><br/>
+          <span class="line-teal">near you.</span>
+        </h1>
+        <p class="hero-sub">
+          Connect with <strong>verified plumbers, electricians, painters</strong> and more — right in your neighbourhood. Book in minutes, pay safely.
+        </p>
+        <div class="hero-actions">
+          <a href="browse.html" class="btn-primary">
+            🔍 Find a worker
+          </a>
+          <a href="signup.html" class="btn-secondary">
+            💼 I want to work →
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num" data-target="200">0</div>
+            <div class="stat-label">Verified workers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="200">0</div>
+            <div class="stat-label">Jobs completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="200">0</div>
+            <div class="stat-label">Avg. rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero visual card stack -->
+      <div class="hero-visual">
+        <div class="hero-card-stack">
+          <!-- Main worker card -->
+          <div class="hcard hcard-main">
+            <div class="hcard-worker">
+              <div class="hcard-avatar">RB</div>
+              <div>
+                <div class="hcard-name">Ram Bahadur Tamang</div>
+                <div class="hcard-role">Master Plumber · Kathmandu</div>
+              </div>
+            </div>
+            <div class="hcard-stars">★★★★★</div>
+            <div class="hcard-rating" style="font-size:12px;color:var(--ink-3);margin-top:2px">4.9 · 84 jobs completed</div>
+            <div class="hcard-tags" style="margin-top:12px">
+              <span class="tag tag-green">✓ Available now</span>
+              <span class="tag">Pipe repair</span>
+              <span class="tag">Water tank</span>
+              <span class="tag">Bathroom fit</span>
+            </div>
+            <div class="hcard-price-row">
+              <div>
+                <div class="hcard-price">Rs 800 <span>/ hour</span></div>
+                <div style="font-size:11px;color:var(--ink-3);margin-top:2px">1.2 km away</div>
+              </div>
+              <div class="book-chip">Book now</div>
+            </div>
+          </div>
+          <!-- Mini earnings card -->
+          <div class="hcard hcard-mini hcard-mini-1">
+            <div class="mini-label">This week's earnings</div>
+            <div class="mini-val">Rs 12,400</div>
+            <div class="mini-sub">↑ 18% vs last week</div>
+          </div>
+          <!-- Mini job card -->
+          <div class="hcard hcard-mini hcard-mini-2">
+            <div class="mini-label">New job request</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-top:4px">Fix leaking pipe</div>
+            <div style="font-size:11px;color:var(--ink-3);margin-top:2px">Baneshwor · Rs 1,500</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section" id="categories">
+    <div class="section-inner">
+      <span class="section-tag reveal">What can we help with?</span>
+      <h2 class="section-title reveal">Every kaam,<br/>covered.</h2>
+      <p class="section-sub reveal">From a dripping tap to a full renovation — find the right KamDai for the job.</p>
+      <div class="categories-grid">
+        <a href="browse.html?cat=plumbing" class="cat-card reveal">
+          <span class="cat-icon">🔧</span>
+          <div class="cat-name">Plumbing</div>
+          <div class="cat-count">48 workers</div>
+        </a>
+        <a href="browse.html?cat=electrical" class="cat-card reveal">
+          <span class="cat-icon">⚡</span>
+          <div class="cat-name">Electrical</div>
+          <div class="cat-count">35 workers</div>
+        </a>
+        <a href="browse.html?cat=painting" class="cat-card reveal">
+          <span class="cat-icon">🎨</span>
+          <div class="cat-name">Painting</div>
+          <div class="cat-count">29 workers</div>
+        </a>
+        <a href="browse.html?cat=cleaning" class="cat-card reveal">
+          <span class="cat-icon">🧹</span>
+          <div class="cat-name">Cleaning</div>
+          <div class="cat-count">52 workers</div>
+        </a>
+        <a href="browse.html?cat=carpentry" class="cat-card reveal">
+          <span class="cat-icon">🪵</span>
+          <div class="cat-name">Carpentry</div>
+          <div class="cat-count">22 workers</div>
+        </a>
+        <a href="browse.html?cat=moving" class="cat-card reveal">
+          <span class="cat-icon">📦</span>
+          <div class="cat-name">Moving</div>
+          <div class="cat-count">18 workers</div>
+        </a>
+        <a href="browse.html?cat=gardening" class="cat-card reveal">
+          <span class="cat-icon">🌿</span>
+          <div class="cat-name">Gardening</div>
+          <div class="cat-count">14 workers</div>
+        </a>
+        <a href="browse.html?cat=appliances" class="cat-card reveal">
+          <span class="cat-icon">🔌</span>
+          <div class="cat-name">Appliances</div>
+          <div class="cat-count">31 workers</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how-section" id="how-it-works">
+    <div class="section-inner">
+      <span class="section-tag reveal">Simple process</span>
+      <h2 class="section-title reveal">Kaam garnuhos,<br/>tension nahos.</h2>
+      <p class="section-sub reveal">Get work done in three easy steps — no calls, no haggling.</p>
+      <div class="steps-grid reveal">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-icon-wrap">🔍</div>
+          <div class="step-title">Post or browse</div>
+          <p class="step-desc">Describe what you need or browse verified workers by category and distance. Takes under 2 minutes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-icon-wrap">✅</div>
+          <div class="step-title">Book & confirm</div>
+          <p class="step-desc">Choose your KamDai, agree on price, and confirm the booking. Payment is held safely until the job is done.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-icon-wrap">⭐</div>
+          <div class="step-title">Done & reviewed</div>
+          <p class="step-desc">Job complete? Release payment and leave a review. It's that simple — no cash confusion, no disputes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED WORKERS -->
+  <section class="section" id="workers">
+    <div class="section-inner">
+      <span class="section-tag reveal">Top rated this week</span>
+      <h2 class="section-title reveal">Meet your<br/>KamDais.</h2>
+      <p class="section-sub reveal">Every worker is ID-verified and reviewed by real clients in Kathmandu.</p>
+      <div class="workers-grid">
+        <div class="worker-card reveal">
+          <div class="wc-top">
+            <div class="wc-avatar" style="background:linear-gradient(135deg,#E8882A,#C0392B)">RB</div>
+            <div>
+              <div class="wc-name">Ram Bahadur</div>
+              <div class="wc-role">Plumber</div>
+            </div>
+            <span class="wc-verified">✓ Verified</span>
+          </div>
+          <div class="wc-rating-row">
+            <span class="wc-stars">★★★★★</span>
+            <span class="wc-jobs">4.9 · 84 jobs</span>
+          </div>
+          <div class="wc-tags">
+            <span class="tag">Pipe repair</span>
+            <span class="tag">Water tank</span>
+            <span class="tag">Sanitation</span>
+          </div>
+          <div class="wc-bottom">
+            <div class="wc-price">Rs 800 <small>/ hr</small></div>
+            <div class="wc-dist">📍 1.2 km</div>
+          </div>
+        </div>
+        <div class="worker-card reveal">
+          <div class="wc-top">
+            <div class="wc-avatar" style="background:linear-gradient(135deg,#1A7F74,#0D5C54)">SP</div>
+            <div>
+              <div class="wc-name">Sunita Poudel</div>
+              <div class="wc-role">Electrician</div>
+            </div>
+            <span class="wc-verified">✓ Verified</span>
+          </div>
+          <div class="wc-rating-row">
+            <span class="wc-stars">★★★★★</span>
+            <span class="wc-jobs">4.8 · 61 jobs</span>
+          </div>
+          <div class="wc-tags">
+            <span class="tag">Wiring</span>
+            <span class="tag">MCB/fuse</span>
+            <span class="tag">Inverter</span>
+          </div>
+          <div class="wc-bottom">
+            <div class="wc-price">Rs 1,000 <small>/ hr</small></div>
+            <div class="wc-dist">📍 2.4 km</div>
+          </div>
+        </div>
+        <div class="worker-card reveal">
+          <div class="wc-top">
+            <div class="wc-avatar" style="background:linear-gradient(135deg,#7B5EA7,#4B3582)">BK</div>
+            <div>
+              <div class="wc-name">Bikash Karki</div>
+              <div class="wc-role">Painter</div>
+            </div>
+            <span class="wc-verified">✓ Verified</span>
+          </div>
+          <div class="wc-rating-row">
+            <span class="wc-stars">★★★★☆</span>
+            <span class="wc-jobs">4.6 · 43 jobs</span>
+          </div>
+          <div class="wc-tags">
+            <span class="tag">Interior</span>
+            <span class="tag">Exterior</span>
+            <span class="tag">Texture</span>
+          </div>
+          <div class="wc-bottom">
+            <div class="wc-price">Rs 700 <small>/ hr</small></div>
+            <div class="wc-dist">📍 3.1 km</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:36px">
+        <a href="browse.html" class="btn-secondary">See all workers →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="section trust-section">
+    <div class="section-inner">
+      <span class="section-tag reveal">Why KamDai</span>
+      <h2 class="section-title reveal">Built on trust,<br/>backed by results.</h2>
+      <p class="section-sub reveal">We do the vetting so you don't have to worry.</p>
+      <div class="trust-grid reveal">
+        <div class="trust-item">
+          <div class="trust-icon">🪪</div>
+          <div class="trust-title">ID Verified workers</div>
+          <p class="trust-desc">Every worker goes through identity and skill verification before appearing on the platform. No strangers, only trusted professionals.</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">🔒</div>
+          <div class="trust-title">Safe escrow payments</div>
+          <p class="trust-desc">Your money is held securely and only released when you confirm the job is complete. No upfront cash, no disputes.</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">⭐</div>
+          <div class="trust-title">Real reviews only</div>
+          <p class="trust-desc">All ratings come from verified, completed bookings. Fake reviews are automatically filtered out so you always see the truth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <div class="cta-box">
+        <div style="position:relative;z-index:1">
+          <h2 class="cta-title">Ready to get your<br/>kaam done?</h2>
+          <p class="cta-sub">Join thousands of happy clients and workers in Kathmandu.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="browse.html" class="btn-white">🔍 Find a KamDai</a>
+          <a href="signup.html" class="btn-ghost-white">💼 Join as a worker</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <a href="index.html" class="footer-logo">Kam<span>Dai</span></a>
+          <p class="footer-desc">Nepal's first platform connecting skilled blue-collar workers with clients who need them — fast, safe, and local.</p>
+        </div>
+        <div class="footer-col">
+          <h4>For Clients</h4>
+          <a href="browse.html">Find workers</a>
+          <a href="post-job.html">Post a job</a>
+          <a href="bookings.html">My bookings</a>
+        </div>
+        <div class="footer-col">
+          <h4>For Workers</h4>
+          <a href="signup.html">Join as worker</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="profile-setup.html">Setup profile</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About us</a>
+          <a href="#">How it works</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 KamDai — Find Skilled Workers Near You</span>
+        <div style="display:flex;gap:20px">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Mobile nav toggle
+    document.getElementById('hamburger').addEventListener('click', () => {
+      const links = document.querySelector('.nav-links');
+      links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+      links.style.flexDirection = 'column';
+      links.style.position = 'absolute';
+      links.style.top = '64px'; links.style.left = '0'; links.style.right = '0';
+      links.style.background = 'var(--paper)';
+      links.style.padding = '20px 5%';
+      links.style.borderBottom = '1px solid var(--paper-3)';
+    });
+    const themeBtn = document.getElementById('themeToggle');
+
+themeBtn.addEventListener('click',()=>{
+
+  document.body.classList.toggle('dark');
+
+  localStorage.setItem(
+    'theme',
+    document.body.classList.contains('dark')
+  );
+
+});
+
+if(localStorage.getItem('theme')==='true'){
+  document.body.classList.add('dark');
+}
+
+  </script>
+</body>
+</html>

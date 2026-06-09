@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — KamDai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:       #0F0E0C;
+      --ink-2:     #3D3B35;
+      --ink-3:     #7A7870;
+      --paper:     #FAF9F6;
+      --paper-2:   #F2F0EB;
+      --paper-3:   #E8E5DE;
+      --saffron:   #E8882A;
+      --saffron-l: #FDF0E0;
+      --teal:      #1A7F74;
+      --teal-l:    #E0F2EF;
+      --red:       #E53E3E;
+      --card-r:    14px;
+      --sans:      'DM Sans', sans-serif;
+      --display:   'Syne', sans-serif;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      background: var(--ink);
+      padding: 48px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .left-panel::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(232,136,42,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(26,127,116,0.1) 0%, transparent 50%);
+    }
+    .left-panel::after {
+      content: ''; position: absolute; inset: 0; opacity: 0.03;
+      background-image: linear-gradient(white 1px, transparent 1px),
+                        linear-gradient(90deg, white 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .left-content { position: relative; z-index: 1; }
+    .left-logo {
+      font-family: var(--display); font-size: 24px; font-weight: 800;
+      color: white; text-decoration: none; letter-spacing: -0.5px;
+    }
+    .left-logo span { color: var(--saffron); }
+    .left-tagline { margin-top: 64px; }
+    .left-tagline h2 {
+      font-family: var(--display);
+      font-size: clamp(26px, 3vw, 40px); font-weight: 800;
+      color: white; line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .left-tagline h2 em { font-style: normal; color: var(--saffron); }
+    .left-tagline p {
+      font-size: 15px; color: rgba(255,255,255,0.55);
+      line-height: 1.65; font-weight: 300; max-width: 300px;
+    }
+    /* Role benefits */
+    .role-benefits { margin-top: 40px; display: flex; flex-direction: column; gap: 14px; }
+    .benefit-item { display: flex; align-items: flex-start; gap: 12px; }
+    .benefit-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(232,136,42,0.15); border: 1px solid rgba(232,136,42,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+    }
+    .benefit-text { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+    .benefit-text strong { color: white; font-weight: 500; display: block; margin-bottom: 1px; }
+    .left-bottom { position: relative; z-index: 1; font-size: 12px; color: rgba(255,255,255,0.3); }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px; background: var(--paper); overflow-y: auto;
+    }
+    .auth-box { width: 100%; max-width: 420px; }
+    .auth-eyebrow {
+      font-size: 12px; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--saffron); margin-bottom: 8px;
+    }
+    .auth-title {
+      font-family: var(--display); font-size: 28px; font-weight: 800;
+      letter-spacing: -0.5px; margin-bottom: 6px;
+    }
+    .auth-sub {
+      font-size: 14px; color: var(--ink-3); margin-bottom: 28px; font-weight: 300;
+    }
+    .auth-sub a { color: var(--saffron); text-decoration: none; font-weight: 500; }
+    .auth-sub a:hover { text-decoration: underline; }
+
+    /* Role selector */
+    .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .role-card {
+      border: 1.5px solid var(--paper-3); border-radius: 10px;
+      padding: 14px 12px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-align: center; user-select: none;
+    }
+    .role-card:hover { border-color: var(--saffron); }
+    .role-card.selected { border-color: var(--saffron); background: var(--saffron-l); }
+    .role-card .role-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+    .role-card .role-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .role-card .role-desc { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+    /* Form */
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--ink-2); margin-bottom: 6px; }
+    .form-input {
+      width: 100%; height: 46px;
+      border: 1.5px solid var(--paper-3); border-radius: 10px;
+      padding: 0 14px;
+      font-family: var(--sans); font-size: 14px; color: var(--ink);
+      background: white; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(232,136,42,0.1); }
+    .form-input.error { border-color: var(--red); }
+    .form-input::placeholder { color: var(--ink-3); }
+    .input-wrap { position: relative; }
+    .input-wrap .form-input { padding-right: 44px; }
+    .input-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 18px; cursor: pointer; user-select: none; color: var(--ink-3);
+    }
+    .form-error { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+
+    /* Password strength */
+    .pw-strength { margin-top: 6px; }
+    .pw-strength-bar {
+      height: 3px; border-radius: 2px; background: var(--paper-3);
+      overflow: hidden; margin-bottom: 4px;
+    }
+    .pw-strength-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; width: 0%; }
+    .pw-strength-label { font-size: 11px; color: var(--ink-3); }
+
+    /* Terms */
+    .terms-wrap {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--ink-2); margin-bottom: 20px; cursor: pointer;
+      line-height: 1.5;
+    }
+    .terms-wrap input { accent-color: var(--saffron); width: 15px; height: 15px; margin-top: 2px; cursor: pointer; flex-shrink: 0; }
+    .terms-wrap a { color: var(--saffron); text-decoration: none; }
+    .terms-wrap a:hover { text-decoration: underline; }
+
+    .btn-submit {
+      width: 100%; height: 48px;
+      background: var(--ink); color: white; border: none; border-radius: 10px;
+      font-family: var(--sans); font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s, transform 0.15s; margin-bottom: 20px;
+    }
+    .btn-submit:hover { background: var(--saffron); transform: translateY(-1px); }
+
+    .divider-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 12px; color: var(--ink-3); margin-bottom: 16px;
+    }
+    .divider-text::before, .divider-text::after { content: ''; flex: 1; height: 1px; background: var(--paper-3); }
+
+    .btn-google {
+      width: 100%; height: 46px; background: white; color: var(--ink);
+      border: 1.5px solid var(--paper-3); border-radius: 10px;
+      font-family: var(--sans); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-google:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+    .success-msg {
+      display: none; background: var(--teal-l);
+      border: 1px solid rgba(26,127,116,0.2); border-radius: 10px;
+      padding: 12px 16px; font-size: 13px; color: var(--teal); margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 40px 24px; align-items: flex-start; padding-top: 60px; }
+    }
+    @media (max-width: 400px) {
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-content">
+      <a href="index.html" class="left-logo">Kam<span>Dai</span></a>
+      <div class="left-tagline">
+        <h2>Join<br/><em>KamDai</em><br/>today.</h2>
+        <p>Whether you need help or want to earn — KamDai connects you with the right people in Kathmandu.</p>
+      </div>
+      <div class="role-benefits">
+        <div class="benefit-item">
+          <div class="benefit-icon">🔍</div>
+          <div class="benefit-text">
+            <strong>For clients</strong>
+            Find verified, rated workers for any job in minutes.
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">💼</div>
+          <div class="benefit-text">
+            <strong>For workers</strong>
+            Get steady gigs, build your reputation, earn more.
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🔒</div>
+          <div class="benefit-text">
+            <strong>Safe payments</strong>
+            Money held in escrow — released only when you're happy.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="left-bottom">© 2025 KamDai. Made with ❤️ in Kathmandu.</div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="auth-box">
+      <div class="auth-eyebrow">Create account</div>
+      <h1 class="auth-title">Join KamDai</h1>
+      <p class="auth-sub">Already have an account? <a href="login.html">Sign in →</a></p>
+
+      <!-- Role selector -->
+      <div class="role-selector">
+        <div class="role-card selected" id="role-client" onclick="selectRole('client')">
+          <span class="role-emoji">🔍</span>
+          <div class="role-name">I need help</div>
+          <div class="role-desc">Hire a worker</div>
+        </div>
+        <div class="role-card" id="role-worker" onclick="selectRole('worker')">
+          <span class="role-emoji">💼</span>
+          <div class="role-name">I want to work</div>
+          <div class="role-desc">Find gigs</div>
+        </div>
+      </div>
+
+      <div class="success-msg" id="success-msg">
+        ✅ Account created! Setting up your profile…
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">First name</label>
+          <input class="form-input" type="text" id="fname" placeholder="Ram" />
+          <div class="form-error" id="fname-error">Required.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last name</label>
+          <input class="form-input" type="text" id="lname" placeholder="Bahadur" />
+          <div class="form-error" id="lname-error">Required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" id="email" placeholder="you@example.com" />
+        <div class="form-error" id="email-error">Enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone number</label>
+        <input class="form-input" type="tel" id="phone" placeholder="98XXXXXXXX" />
+        <div class="form-error" id="phone-error">Enter a valid phone number.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <input class="form-input" type="password" id="password" placeholder="Create a strong password"
+            oninput="checkPasswordStrength(this.value)" />
+          <span class="input-toggle" id="pw-toggle" onclick="togglePassword('password','pw-toggle')">👁️</span>
+        </div>
+        <div class="pw-strength">
+          <div class="pw-strength-bar"><div class="pw-strength-fill" id="pw-fill"></div></div>
+          <span class="pw-strength-label" id="pw-label">Enter a password</span>
+        </div>
+        <div class="form-error" id="password-error">Password must be at least 6 characters.</div>
+      </div>
+
+      <!-- Worker-only field -->
+      <div class="form-group" id="skill-group" style="display:none">
+        <label class="form-label">Your main skill</label>
+        <select class="form-input" id="skill" style="cursor:pointer">
+          <option value="">Select your trade…</option>
+          <option>Plumbing</option>
+          <option>Electrical</option>
+          <option>Painting</option>
+          <option>Cleaning</option>
+          <option>Carpentry</option>
+          <option>Moving</option>
+          <option>Gardening</option>
+          <option>Appliance repair</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <label class="terms-wrap">
+        <input type="checkbox" id="terms">
+        I agree to KamDai's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+      </label>
+
+      <button class="btn-submit" onclick="handleSignup()">Create account →</button>
+
+      <div class="divider-text">or continue with</div>
+
+      <button class="btn-google">
+        <span>🌐</span> Continue with Google
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let selectedRole = 'client';
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('role-client').classList.toggle('selected', role === 'client');
+      document.getElementById('role-worker').classList.toggle('selected', role === 'worker');
+      document.getElementById('skill-group').style.display = role === 'worker' ? 'block' : 'none';
+    }
+
+    function togglePassword(inputId, toggleId) {
+      const input = document.getElementById(inputId);
+      const toggle = document.getElementById(toggleId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+      toggle.textContent = input.type === 'password' ? '👁️' : '🙈';
+    }
+
+    function checkPasswordStrength(val) {
+      const fill  = document.getElementById('pw-fill');
+      const label = document.getElementById('pw-label');
+      let strength = 0;
+      if (val.length >= 6)  strength++;
+      if (val.length >= 10) strength++;
+      if (/[A-Z]/.test(val)) strength++;
+      if (/[0-9]/.test(val)) strength++;
+      if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+      const levels = [
+        { w:'0%',   bg:'transparent', text:'Enter a password' },
+        { w:'25%',  bg:'#E53E3E',     text:'Weak' },
+        { w:'50%',  bg:'#E8882A',     text:'Fair' },
+        { w:'75%',  bg:'#F59E0B',     text:'Good' },
+        { w:'100%', bg:'#1A7F74',     text:'Strong 💪' },
+      ];
+      const l = levels[Math.min(strength, 4)];
+      fill.style.width = l.w;
+      fill.style.background = l.bg;
+      label.textContent = l.text;
+      label.style.color = l.bg === 'transparent' ? 'var(--ink-3)' : l.bg;
+    }
+
+    function handleSignup() {
+      const fname = document.getElementById('fname');
+      const lname = document.getElementById('lname');
+      const email = document.getElementById('email');
+      const phone = document.getElementById('phone');
+      const password = document.getElementById('password');
+      const terms = document.getElementById('terms');
+      let valid = true;
+
+      // Reset errors
+      ['fname','lname','email','phone','password'].forEach(id => {
+        document.getElementById(id).classList.remove('error');
+        document.getElementById(id + '-error').style.display = 'none';
+      });
+
+      const show = (id) => {
+        document.getElementById(id).classList.add('error');
+        document.getElementById(id + '-error').style.display = 'block';
+        valid = false;
+      };
+
+      if (!fname.value.trim()) show('fname');
+      if (!lname.value.trim()) show('lname');
+      if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) show('email');
+      if (!phone.value || phone.value.length < 10) show('phone');
+      if (!password.value || password.value.length < 6) show('password');
+
+      if (!terms.checked) {
+        alert('Please accept the Terms of Service to continue.');
+        valid = false;
+      }
+
+      if (valid) {
+        document.getElementById('success-msg').style.display = 'block';
+        const redirect = selectedRole === 'worker' ? 'profile-setup.html' : 'browse.html';
+        setTimeout(() => { window.location.href = redirect; }, 1500);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSignup();
+    });
+  </script>
+</body>
+</html>
